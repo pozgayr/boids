@@ -4,9 +4,15 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>/home/pozgayr/Projects/boids/Boids/Content/adam-mimon.png</File>
+    <File>/home/pozgayr/Projects/boids/Boids/Content/avoid.png</File>
     <File>/home/pozgayr/Projects/boids/Boids/Content/boid.png</File>
+    <File>/home/pozgayr/Projects/boids/Boids/Content/mars.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

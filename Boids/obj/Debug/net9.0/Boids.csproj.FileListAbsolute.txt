@@ -33,3 +33,6 @@
 /home/pozgayr/Projects/boids/Boids/obj/Debug/net9.0/Boids.genruntimeconfig.cache
 /home/pozgayr/Projects/boids/Boids/obj/Debug/net9.0/ref/Boids.dll
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/boid.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/adam-mimon.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/mars.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/avoid.xnb

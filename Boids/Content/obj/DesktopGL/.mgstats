@@ -1,2 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"/home/pozgayr/Projects/boids/Boids/Content/boid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/boid.xnb","TextureProcessor","Texture2DContent",3714,26573,0.9617564
+"/home/pozgayr/Projects/boids/Boids/Content/adam-mimon.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/adam-mimon.xnb","TextureProcessor","Texture2DContent",213284,646085,0.1326608
+"/home/pozgayr/Projects/boids/Boids/Content/avoid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/avoid.xnb","TextureProcessor","Texture2DContent",2005,24109,0.0022523
+"/home/pozgayr/Projects/boids/Boids/Content/boid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/boid.xnb","TextureProcessor","Texture2DContent",3714,26573,0.0027555
+"/home/pozgayr/Projects/boids/Boids/Content/mars.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/mars.xnb","TextureProcessor","Texture2DContent",6199835,31612481,1.1877818
