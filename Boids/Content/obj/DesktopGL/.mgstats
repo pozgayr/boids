@@ -1,0 +1,2 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/home/pozgayr/Projects/boids/Boids/Content/boid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/boid.xnb","TextureProcessor","Texture2DContent",3714,26573,0.2716212
