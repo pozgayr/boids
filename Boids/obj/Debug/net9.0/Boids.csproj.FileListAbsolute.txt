@@ -32,9 +32,7 @@
 /home/pozgayr/Projects/boids/Boids/obj/Debug/net9.0/Boids.pdb
 /home/pozgayr/Projects/boids/Boids/obj/Debug/net9.0/Boids.genruntimeconfig.cache
 /home/pozgayr/Projects/boids/Boids/obj/Debug/net9.0/ref/Boids.dll
-/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/boid.xnb
-/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/adam-mimon.xnb
-/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/mars.xnb
-/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/avoid.xnb
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/rybka1.xnb
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/background.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/rybka2.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/jelly.xnb

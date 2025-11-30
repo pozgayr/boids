@@ -7,6 +7,7 @@ namespace Boids;
 
 public interface IBoid
 {
+    Vector2 Pos { get; }
     public void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers);
     public void Draw(SpriteBatch spriteBatch);
 
@@ -76,11 +77,13 @@ public class Boid : IBoid, IPoint
         Vector2 align = Alignment(boids);
         Vector2 coh = Cohesion(boids);
 
-        Vector2 avoid = AvoidPoints(avoids, _radius);
-        Vector2 avoidEnemy = AvoidPoints(chasers, _radius + 2f) * 1.5f;
+        Vector2 avoid = AvoidPoints(avoids, _radius + 10f);
+        Vector2 fear = FleeMany(chasers, 150f);
 
-        _acceleration = sep + align + coh + avoid + avoidEnemy;
+        _acceleration = sep + align + coh + avoid + fear;
         _velocity += _acceleration;
+        if (_velocity.Length() < 1f)
+            _velocity = Vector2.Normalize(_velocity) * 1f;
 
         Move();
         rotation = GetBoidRotation();
@@ -113,7 +116,7 @@ public class Boid : IBoid, IPoint
         return v;
     }
 
-    private Vector2 Separation(List<Boid> boids)
+    private Vector2 Separation(IEnumerable<Boid> boids)
     {
         float desiredDist = _neighborhood / 2.0f;
         Vector2 steer = Vector2.Zero;
@@ -144,7 +147,7 @@ public class Boid : IBoid, IPoint
         return steer;
     }
 
-    private Vector2 Alignment(List<Boid> boids)
+    private Vector2 Alignment(IEnumerable<Boid> boids)
     {
         Vector2 sum = Vector2.Zero;
         Vector2 steer = Vector2.Zero;
@@ -170,7 +173,7 @@ public class Boid : IBoid, IPoint
         return steer;
     }
 
-    private Vector2 Cohesion(List<Boid> boids)
+    private Vector2 Cohesion(IEnumerable<Boid> boids)
     {
         Vector2 sum = Vector2.Zero;
         int count = 0;
@@ -178,7 +181,7 @@ public class Boid : IBoid, IPoint
         foreach (var other in boids)
         {
             float d = Vector2.Distance(Pos, other.Pos);
-            if (other != this && d < _neighborhood)
+            if (other != this && d < _neighborhood + 30f)
             {
                 sum += other.Pos;
                 count++;
@@ -204,7 +207,7 @@ public class Boid : IBoid, IPoint
     {
         float d = Vector2.Distance(Pos, target);
 
-        if (d < radius)
+        if (d < radius + 10f)
         {
             Vector2 desired = Pos - target;
 
@@ -226,6 +229,41 @@ public class Boid : IBoid, IPoint
         {
             total += AvoidPoint(point.Pos, radius);
         }
+        return total;
+    }
+
+    protected Vector2 FleeOne(Vector2 target, float radius)
+    {
+        Vector2 diff = Pos - target;
+        float d = diff.Length();
+
+        if (d < radius)
+        {
+            // Stronger force if very close, weaker when far away
+            float strength = 1f - (d / radius);
+            strength = strength * strength + 0.5f;
+
+            diff.Normalize();
+
+            Vector2 desired = diff * _maxSpeed * strength;
+
+            Vector2 steer = desired - _velocity;
+            return Limit(steer, _maxForce * 5f); // gentle fleeing
+        }
+
+        return Vector2.Zero;
+    }
+
+    protected Vector2 FleeMany(IEnumerable<Boid> enemies, float radius)
+    {
+        Vector2 total = Vector2.Zero;
+
+        foreach (var e in enemies)
+        {
+            if (e == this) continue;
+            total += FleeOne(e.Pos, radius);
+        }
+
         return total;
     }
 }

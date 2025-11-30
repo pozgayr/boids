@@ -9,7 +9,7 @@ public class Chaser : Boid
     public Chaser(Vector2 pos, Texture2D img) : base(pos, img)
     {
         _maxSpeed = 6f;
-        size = 0.1f;
+        size = 0.05f;
     }
 
 

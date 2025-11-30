@@ -26,15 +26,19 @@ public class Game1 : Game
     private Texture2D background;
 
     float spawnTimer = 0f;
-    float spawnInterval = 1.5f;
+    float spawnInterval = 0.5f;
     int maxBoids = 50;
 
-    private float eatingRadius = 20f;
+    private float eatingRadius = 50f;
     Random rng = new Random();
 
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.PreferredBackBufferWidth = 1600;
+        _graphics.PreferredBackBufferHeight = 900;
+
+        _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -58,8 +62,8 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         boidImg = Content.Load<Texture2D>("rybka1");
-        avoidImg = Content.Load<Texture2D>("avoid");
-        chaserImg = Content.Load<Texture2D>("adam-mimon");
+        avoidImg = Content.Load<Texture2D>("jelly");
+        chaserImg = Content.Load<Texture2D>("rybka2");
         background = Content.Load<Texture2D>("background");
 
     }
@@ -125,6 +129,11 @@ public class Game1 : Game
         for (int i = 0; i < chasers.Count; i++)
         {
             chasers[i].Update(boids, avoids, chasers);
+        }
+
+        for (int i = 0; i < avoids.Count; i++)
+        {
+            avoids[i].Update(boids, avoids, chasers);
         }
 
         List<Boid> eaten = new();

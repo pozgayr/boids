@@ -1,7 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"/home/pozgayr/Projects/boids/Boids/Content/adam-mimon.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/adam-mimon.xnb","TextureProcessor","Texture2DContent",213284,646085,0.1579267
-"/home/pozgayr/Projects/boids/Boids/Content/avoid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/avoid.xnb","TextureProcessor","Texture2DContent",2005,24109,0.0016382
-"/home/pozgayr/Projects/boids/Boids/Content/background.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/background.xnb","TextureProcessor","Texture2DContent",1231647,96000085,4.0419297
-"/home/pozgayr/Projects/boids/Boids/Content/boid.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/boid.xnb","TextureProcessor","Texture2DContent",3714,26573,0.1773453
-"/home/pozgayr/Projects/boids/Boids/Content/mars.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/mars.xnb","TextureProcessor","Texture2DContent",6199835,31612481,1.4007664
-"/home/pozgayr/Projects/boids/Boids/Content/rybka1.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/rybka1.xnb","TextureProcessor","Texture2DContent",1276527,34799445,0.9149816
+"/home/pozgayr/Projects/boids/Boids/Content/background.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/background.xnb","TextureProcessor","Texture2DContent",1231647,96000085,3.3742845
+"/home/pozgayr/Projects/boids/Boids/Content/jelly.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/jelly.xnb","TextureProcessor","Texture2DContent",80894,293273,0.764621
+"/home/pozgayr/Projects/boids/Boids/Content/rybka1.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/rybka1.xnb","TextureProcessor","Texture2DContent",1085079,2778845,0.2269104
+"/home/pozgayr/Projects/boids/Boids/Content/rybka2.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/rybka2.xnb","TextureProcessor","Texture2DContent",4046274,12516981,0.4672083

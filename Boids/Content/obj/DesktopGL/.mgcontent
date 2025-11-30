@@ -4,16 +4,12 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>/home/pozgayr/Projects/boids/Boids/Content/adam-mimon.png</File>
-    <File>/home/pozgayr/Projects/boids/Boids/Content/avoid.png</File>
     <File>/home/pozgayr/Projects/boids/Boids/Content/background.png</File>
-    <File>/home/pozgayr/Projects/boids/Boids/Content/boid.png</File>
-    <File>/home/pozgayr/Projects/boids/Boids/Content/mars.png</File>
+    <File>/home/pozgayr/Projects/boids/Boids/Content/jelly.png</File>
     <File>/home/pozgayr/Projects/boids/Boids/Content/rybka1.png</File>
+    <File>/home/pozgayr/Projects/boids/Boids/Content/rybka2.png</File>
   </SourceFiles>
   <DestFiles>
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
