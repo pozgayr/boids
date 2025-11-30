@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
+
 
 namespace Boids;
 
@@ -14,10 +16,21 @@ public class Game1 : Game
 
     private List<Boid> boids;
     private List<Avoid> avoids;
+    private List<Chaser> chasers;
     private MouseState prevMouse;
+    private KeyboardState prevKb;
 
     private Texture2D boidImg;
     private Texture2D avoidImg;
+    private Texture2D chaserImg;
+    private Texture2D background;
+
+    float spawnTimer = 0f;
+    float spawnInterval = 1.5f;
+    int maxBoids = 50;
+
+    private float eatingRadius = 20f;
+    Random rng = new Random();
 
     public Game1()
     {
@@ -36,6 +49,7 @@ public class Game1 : Game
 
         boids = new List<Boid>();
         avoids = new List<Avoid>();
+        chasers = new List<Chaser>();
         base.Initialize();
     }
 
@@ -43,9 +57,18 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        boidImg = Content.Load<Texture2D>("boid");
+        boidImg = Content.Load<Texture2D>("rybka1");
         avoidImg = Content.Load<Texture2D>("avoid");
+        chaserImg = Content.Load<Texture2D>("adam-mimon");
+        background = Content.Load<Texture2D>("background");
 
+    }
+
+    Vector2 RandomSpawnPos()
+    {
+        float x = (float)rng.NextDouble() * Game1.screenWidth;
+        float y = (float)rng.NextDouble() * Game1.screenHeight;
+        return new Vector2(x, y);
     }
 
     protected override void Update(GameTime gameTime)
@@ -57,6 +80,7 @@ public class Game1 : Game
 
 
         MouseState mouse = Mouse.GetState();
+        KeyboardState kb = Keyboard.GetState();
         int mouseX = mouse.X;
         int mouseY = mouse.Y;
 
@@ -65,6 +89,8 @@ public class Game1 : Game
 
         bool rightClick = mouse.RightButton == ButtonState.Pressed &&
                  prevMouse.RightButton == ButtonState.Released;
+
+        bool pressedE = kb.IsKeyDown(Keys.E) && prevKb.IsKeyUp(Keys.E);
 
         if (leftClick)
         {
@@ -76,13 +102,50 @@ public class Game1 : Game
             avoids.Add(new Avoid(new Vector2(mouseX, mouseY), avoidImg));
         }
 
+
+        if (pressedE)
+        {
+            chasers.Add(new Chaser(new Vector2(mouseX, mouseY), chaserImg));
+        }
+        spawnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (spawnTimer >= spawnInterval && boids.Count < maxBoids)
+        {
+            spawnTimer = 0f;
+            boids.Add(new Boid(RandomSpawnPos(), boidImg));
+        }
+
         prevMouse = mouse;
+        prevKb = kb;
 
         for (int i = 0; i < boids.Count; i++)
         {
-            boids[i].Update(boids, avoids);
+            boids[i].Update(boids, avoids, chasers);
         }
 
+        for (int i = 0; i < chasers.Count; i++)
+        {
+            chasers[i].Update(boids, avoids, chasers);
+        }
+
+        List<Boid> eaten = new();
+
+        foreach (var c in chasers)
+        {
+            foreach (var b in boids)
+            {
+                float dist = Vector2.Distance(c.Pos, b.Pos);
+
+                if (dist < eatingRadius)
+                {
+                    eaten.Add(b);
+                }
+            }
+        }
+
+        foreach (var b in eaten)
+        {
+            boids.Remove(b);
+        }
 
         base.Update(gameTime);
     }
@@ -93,6 +156,12 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
+        _spriteBatch.Draw(
+            background,
+            new Rectangle(0, 0, screenWidth, screenHeight),
+            Color.White
+        );
+
         for (int i = 0; i < boids.Count; i++)
         {
             boids[i].Draw(_spriteBatch);
@@ -101,6 +170,11 @@ public class Game1 : Game
         for (int i = 0; i < avoids.Count; i++)
         {
             avoids[i].Draw(_spriteBatch);
+        }
+
+        for (int i = 0; i < chasers.Count; i++)
+        {
+            chasers[i].Draw(_spriteBatch);
         }
         _spriteBatch.End();
 

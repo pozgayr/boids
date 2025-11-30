@@ -4,29 +4,36 @@ using System;
 using System.Collections.Generic;
 
 namespace Boids;
-public class Boid
-{
-    Vector2 _pos;
-    Vector2 _velocity;
-    Vector2 _acceleration;
-    Texture2D _img;
-    Vector2 origin;
-    float rotation;
-    float size = 0.4f;
-    float halfH;
-    float halfW;
 
-    float _maxSpeed = 4f;
-    float _maxForce = 0.05f;
-    float _neighborhood = 60f;
-    float _radius = 60f;
+public interface IBoid
+{
+    public void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers);
+    public void Draw(SpriteBatch spriteBatch);
+
+}
+public class Boid : IBoid, IPoint
+{
+    public Vector2 Pos { get; protected set; }
+    protected Vector2 _velocity;
+    protected Vector2 _acceleration;
+    protected Texture2D _img;
+    protected Vector2 origin;
+    protected float rotation;
+    protected float size = 0.05f;
+    protected float halfH;
+    protected float halfW;
+
+    protected float _maxSpeed = 4f;
+    protected float _maxForce = 0.05f;
+    protected float _neighborhood = 60f;
+    protected float _radius = 30f;
 
     static Random rng = new Random();
 
 
     public Boid(Vector2 pos, Texture2D img)
     {
-        _pos = pos;
+        Pos = pos;
         _velocity = RandomDirection();
         _acceleration = RandomDirection();
         _img = img;
@@ -52,7 +59,7 @@ public class Boid
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(_img,
-                          _pos,
+                          Pos,
                          null,
                          Color.White,
                          rotation,
@@ -62,7 +69,7 @@ public class Boid
                          0f);
     }
 
-    public void Update(List<Boid> boids, List<Avoid> avoids)
+    public virtual void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers)
     {
 
         Vector2 sep = Separation(boids) * 1.5f;
@@ -70,8 +77,9 @@ public class Boid
         Vector2 coh = Cohesion(boids);
 
         Vector2 avoid = AvoidPoints(avoids, _radius);
+        Vector2 avoidEnemy = AvoidPoints(chasers, _radius + 2f) * 1.5f;
 
-        _acceleration = sep + align + coh + avoid;
+        _acceleration = sep + align + coh + avoid + avoidEnemy;
         _velocity += _acceleration;
 
         Move();
@@ -79,23 +87,26 @@ public class Boid
 
     }
 
-    private void Move()
+    protected void Move()
     {
-        _pos += _velocity;
+        Vector2 p = Pos;
+        p += _velocity;
 
-        if (_pos.X > Game1.screenWidth + halfW) _pos.X = -halfW;
-        if (_pos.X < -halfW) _pos.X = Game1.screenWidth + halfW;
+        if (p.X > Game1.screenWidth + halfW) p.X = -halfW;
+        if (p.X < -halfW) p.X = Game1.screenWidth + halfW;
 
-        if (_pos.Y > Game1.screenHeight + halfH) _pos.Y = -halfH;
-        if (_pos.Y < -halfH) _pos.Y = Game1.screenHeight + halfH;
+        if (p.Y > Game1.screenHeight + halfH) p.Y = -halfH;
+        if (p.Y < -halfH) p.Y = Game1.screenHeight + halfH;
+
+        Pos = p;
     }
 
-    private float GetBoidRotation()
+    protected float GetBoidRotation()
     {
         return MathF.Atan2(_velocity.Y, _velocity.X) + MathF.PI / 2f;
     }
 
-    private Vector2 Limit(Vector2 v, float max)
+    protected Vector2 Limit(Vector2 v, float max)
     {
         if (v.LengthSquared() > max * max)
             return Vector2.Normalize(v) * max;
@@ -111,11 +122,11 @@ public class Boid
 
         foreach (var other in boids)
         {
-            float d = Vector2.Distance(_pos, other._pos);
+            float d = Vector2.Distance(Pos, other.Pos);
 
             if (other != this && d < desiredDist)
             {
-                Vector2 diff = _pos - other._pos;
+                Vector2 diff = Pos - other.Pos;
                 diff /= d;
                 steer += diff;
                 count++;
@@ -141,7 +152,7 @@ public class Boid
 
         foreach (var other in boids)
         {
-            float d = Vector2.Distance(_pos, other._pos);
+            float d = Vector2.Distance(Pos, other.Pos);
             if (other != this && d < _neighborhood)
             {
                 sum += other._velocity;
@@ -166,10 +177,10 @@ public class Boid
 
         foreach (var other in boids)
         {
-            float d = Vector2.Distance(_pos, other._pos);
+            float d = Vector2.Distance(Pos, other.Pos);
             if (other != this && d < _neighborhood)
             {
-                sum += other._pos;
+                sum += other.Pos;
                 count++;
             }
         }
@@ -181,24 +192,24 @@ public class Boid
         return Vector2.Zero;
     }
 
-    private Vector2 Seek(Vector2 target)
+    protected Vector2 Seek(Vector2 target)
     {
-        Vector2 desired = target - _pos;
+        Vector2 desired = target - Pos;
         desired = Vector2.Normalize(desired) * _maxSpeed;
         Vector2 steer = desired - _velocity;
         return Limit(steer, _maxForce);
     }
 
-    private Vector2 AvoidPoint(Vector2 target, float radius)
+    protected Vector2 AvoidPoint(Vector2 target, float radius)
     {
-        float d = Vector2.Distance(_pos, target);
+        float d = Vector2.Distance(Pos, target);
 
         if (d < radius)
         {
-            Vector2 desired = _pos - target;
+            Vector2 desired = Pos - target;
 
             if (desired.LengthSquared() > 0)
-                desired = Vector2.Normalize(desired) * _maxSpeed;
+                desired = Vector2.Normalize(desired);
 
             Vector2 steer = desired - _velocity;
             return Limit(steer, _maxForce * 2.0f);
@@ -207,13 +218,13 @@ public class Boid
         return Vector2.Zero;
     }
 
-    private Vector2 AvoidPoints(List<Avoid> avoids, float radius)
+    protected Vector2 AvoidPoints(IEnumerable<IPoint> avoids, float radius)
     {
         Vector2 total = Vector2.Zero;
 
         foreach (var point in avoids)
         {
-            total += AvoidPoint(point._pos, radius);
+            total += AvoidPoint(point.Pos, radius);
         }
         return total;
     }

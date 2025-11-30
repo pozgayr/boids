@@ -36,3 +36,5 @@
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/adam-mimon.xnb
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/mars.xnb
 /home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/avoid.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/rybka1.xnb
+/home/pozgayr/Projects/boids/Boids/bin/Debug/net9.0/Content/background.xnb
