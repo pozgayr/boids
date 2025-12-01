@@ -322,7 +322,7 @@ public class PurpleFish : Boid
     {
         Species = Species.Purple;
     }
-    protected override float Size => 0.04f;
+    protected override float Size => 0.03f;
     protected override float MaxSpeed => 6.0f;
     protected override float MaxForce => 0.09f;
     protected override float Neighborhood => 70f;
@@ -362,7 +362,7 @@ public class YellowFish : Boid
     {
         Species = Species.Yellow;
     }
-    protected override float Size => 0.08f;
+    protected override float Size => 0.065f;
 
     protected override float MaxSpeed => 2.0f;
     protected override float MaxForce => 0.03f;

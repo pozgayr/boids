@@ -1,7 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"/home/pozgayr/Projects/boids/Boids/Content/background.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/background.xnb","TextureProcessor","Texture2DContent",1231647,96000085,2.633147
-"/home/pozgayr/Projects/boids/Boids/Content/chaser.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/chaser.xnb","TextureProcessor","Texture2DContent",4046274,12516981,0.5478286
-"/home/pozgayr/Projects/boids/Boids/Content/jelly.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/jelly.xnb","TextureProcessor","Texture2DContent",80894,293273,0.0174253
-"/home/pozgayr/Projects/boids/Boids/Content/purple_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/purple_fish.xnb","TextureProcessor","Texture2DContent",867830,1591285,0.0652425
-"/home/pozgayr/Projects/boids/Boids/Content/red_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/red_fish.xnb","TextureProcessor","Texture2DContent",1085079,2778845,0.1182508
-"/home/pozgayr/Projects/boids/Boids/Content/yellow_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/yellow_fish.xnb","TextureProcessor","Texture2DContent",1786868,3751441,0.1383207
+"/home/pozgayr/Projects/boids/Boids/Content/background.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/background.xnb","TextureProcessor","Texture2DContent",1231647,96000085,2.5937872
+"/home/pozgayr/Projects/boids/Boids/Content/chaser.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/chaser.xnb","TextureProcessor","Texture2DContent",4046274,12516981,0.7317608
+"/home/pozgayr/Projects/boids/Boids/Content/jelly.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/jelly.xnb","TextureProcessor","Texture2DContent",80894,293273,0.2245155
+"/home/pozgayr/Projects/boids/Boids/Content/purple_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/purple_fish.xnb","TextureProcessor","Texture2DContent",1277021,6601045,0.324667
+"/home/pozgayr/Projects/boids/Boids/Content/red_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/red_fish.xnb","TextureProcessor","Texture2DContent",1085079,2778845,0.0833606
+"/home/pozgayr/Projects/boids/Boids/Content/yellow_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/yellow_fish.xnb","TextureProcessor","Texture2DContent",2772478,8338953,0.3970927
