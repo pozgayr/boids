@@ -1,5 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
 "/home/pozgayr/Projects/boids/Boids/Content/background.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/background.xnb","TextureProcessor","Texture2DContent",1231647,96000085,3.0583313
+"/home/pozgayr/Projects/boids/Boids/Content/chaser.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/chaser.xnb","TextureProcessor","Texture2DContent",4046274,12516981,0.6156177
 "/home/pozgayr/Projects/boids/Boids/Content/jelly.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/jelly.xnb","TextureProcessor","Texture2DContent",80894,293273,0.0218509
-"/home/pozgayr/Projects/boids/Boids/Content/rybka1.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/rybka1.xnb","TextureProcessor","Texture2DContent",1085079,2778845,0.1568407
-"/home/pozgayr/Projects/boids/Boids/Content/rybka2.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/rybka2.xnb","TextureProcessor","Texture2DContent",4046274,12516981,0.7263415
+"/home/pozgayr/Projects/boids/Boids/Content/purple_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/purple_fish.xnb","TextureProcessor","Texture2DContent",867830,1591285,0.058741
+"/home/pozgayr/Projects/boids/Boids/Content/red_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/red_fish.xnb","TextureProcessor","Texture2DContent",1085079,2778845,0.1121551
+"/home/pozgayr/Projects/boids/Boids/Content/yellow_fish.png","/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/yellow_fish.xnb","TextureProcessor","Texture2DContent",1786868,3751441,0.1495175

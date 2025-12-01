@@ -21,15 +21,23 @@ public class Game1 : Game
     private KeyboardState prevKb;
 
     private Texture2D boidImg;
+    private Texture2D purpleBoid;
+    private Texture2D yellowBoid;
     private Texture2D avoidImg;
     private Texture2D chaserImg;
     private Texture2D background;
 
-    float spawnTimer = 0f;
-    float spawnInterval = 0.5f;
-    int maxBoids = 50;
+    float redTimer = 0f;
+    float redInterval = 0.5f;
 
-    private float eatingRadius = 50f;
+    float purpleTimer = 0f;
+    float purpleInterval = 1.5f;
+
+    float yellowTimer = 0f;
+    float yellowInterval = 3f;
+    int maxBoids = 100;
+
+    private float eatingRadius = 60f;
     Random rng = new Random();
 
     public Game1()
@@ -64,10 +72,12 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        boidImg = Content.Load<Texture2D>("rybka1");
+        boidImg = Content.Load<Texture2D>("red_fish");
         avoidImg = Content.Load<Texture2D>("jelly");
-        chaserImg = Content.Load<Texture2D>("rybka2");
+        chaserImg = Content.Load<Texture2D>("chaser");
         background = Content.Load<Texture2D>("background");
+        purpleBoid = Content.Load<Texture2D>("purple_fish");
+        yellowBoid = Content.Load<Texture2D>("yellow_fish");
 
     }
 
@@ -99,9 +109,11 @@ public class Game1 : Game
 
         bool pressedE = kb.IsKeyDown(Keys.E) && prevKb.IsKeyUp(Keys.E);
 
+        bool pressedR = kb.IsKeyDown(Keys.R) && prevKb.IsKeyUp(Keys.R);
+
         if (leftClick)
         {
-            boids.Add(new Boid(new Vector2(mouseX, mouseY), boidImg));
+            boids.Add(new RedFish(new Vector2(mouseX, mouseY), boidImg));
         }
 
         if (rightClick)
@@ -109,18 +121,35 @@ public class Game1 : Game
             avoids.Add(new Avoid(new Vector2(mouseX, mouseY), avoidImg));
         }
 
-
         if (pressedE)
         {
             chasers.Add(new Chaser(new Vector2(mouseX, mouseY), chaserImg));
         }
-        spawnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (spawnTimer >= spawnInterval && boids.Count < maxBoids)
-        {
-            spawnTimer = 0f;
-            boids.Add(new Boid(RandomSpawnPos(), boidImg));
-        }
+        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+        if (boids.Count < maxBoids)
+        {
+            redTimer += dt;
+            if (redTimer >= redInterval)
+            {
+                redTimer = 0f;
+                boids.Add(new RedFish(RandomSpawnPos(), boidImg));
+            }
+
+            purpleTimer += dt;
+            if (purpleTimer >= purpleInterval)
+            {
+                purpleTimer = 0f;
+                boids.Add(new PurpleFish(RandomSpawnPos(), purpleBoid));
+            }
+
+            yellowTimer += dt;
+            if (yellowTimer >= yellowInterval)
+            {
+                yellowTimer = 0f;
+                boids.Add(new YellowFish(RandomSpawnPos(), yellowBoid));
+            }
+        }
         prevMouse = mouse;
         prevKb = kb;
 

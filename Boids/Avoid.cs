@@ -12,7 +12,7 @@ public class Avoid : IPoint
     Vector2 _velocity;
     float _friction = 0.99f;
     Texture2D _img;
-    float size = 0.3f;
+    float size = 0.5f;
     float halfH;
     float halfW;
     Vector2 origin;
@@ -47,9 +47,9 @@ public class Avoid : IPoint
     }
     public void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers)
     {
-        Vector2 boidPush = AvoidBoids(boids, radius: 40f);
-        Vector2 chaserPush = AvoidBoids(chasers, radius: 60f);
-        Vector2 avoidPush = AvoidBoids(avoids, radius: 30f);
+        Vector2 boidPush = AvoidBoids(boids, radius: 60f);
+        Vector2 chaserPush = AvoidBoids(chasers, radius: 80f);
+        Vector2 avoidPush = AvoidBoids(avoids, radius: 70f);
 
         _velocity += boidPush + chaserPush + avoidPush;
         Move();

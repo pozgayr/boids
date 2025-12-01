@@ -12,22 +12,28 @@ public interface IBoid
     public void Draw(SpriteBatch spriteBatch);
 
 }
-public class Boid : IBoid, IPoint
+
+public enum Species { Red, Purple, Yellow }
+
+public abstract class Boid : IBoid, IPoint
 {
     public Vector2 Pos { get; protected set; }
+    public Species Species { get; protected set; }
+    protected virtual float MaxSpeed => 4f;
+    protected virtual float MaxForce => 0.05f;
+    protected virtual float Neighborhood => 80f;
+    protected virtual float Size => 0.06f;
+    protected virtual float AvoidRadius => 40f;
+    protected virtual float FleeRadius => 150f;
+
     protected Vector2 _velocity;
     protected Vector2 _acceleration;
     protected Texture2D _img;
     protected Vector2 origin;
     protected float rotation;
-    protected float size = 0.05f;
     protected float halfH;
     protected float halfW;
 
-    protected float _maxSpeed = 4f;
-    protected float _maxForce = 0.05f;
-    protected float _neighborhood = 60f;
-    protected float _radius = 30f;
 
     static Random rng = new Random();
 
@@ -39,12 +45,12 @@ public class Boid : IBoid, IPoint
         _acceleration = RandomDirection();
         _img = img;
 
-        halfW = _img.Width * size * 0.5f;
-        halfH = _img.Height * size * 0.5f;
+        halfW = _img.Width * Size * 0.5f;
+        halfH = _img.Height * Size * 0.5f;
         origin = new Vector2(_img.Width * 0.5f, _img.Height * 0.5f);
     }
 
-    private Vector2 RandomDirection()
+    protected Vector2 RandomDirection()
     {
         float x = (float)(rng.NextDouble() * 2 - 1);   // range -1 to +1
         float y = (float)(rng.NextDouble() * 2 - 1);
@@ -65,7 +71,7 @@ public class Boid : IBoid, IPoint
                          Color.White,
                          rotation,
                          origin,
-                         size,
+                         Size,
                          SpriteEffects.None,
                          0f);
     }
@@ -77,10 +83,11 @@ public class Boid : IBoid, IPoint
         Vector2 align = Alignment(boids);
         Vector2 coh = Cohesion(boids);
 
-        Vector2 avoid = AvoidPoints(avoids, _radius + 10f);
-        Vector2 fear = FleeMany(chasers, 150f);
+        Vector2 avoid = AvoidPoints(avoids, AvoidRadius);
+        Vector2 fear = FleeMany(chasers, FleeRadius);
+        Vector2 avoidOther = AvoidOtherSpecies(boids, AvoidRadius + 20f);
 
-        _acceleration = sep + align + coh + avoid + fear;
+        _acceleration = sep + align + coh + avoid + fear + avoidOther;
         _velocity += _acceleration;
         if (_velocity.Length() < 1f)
             _velocity = Vector2.Normalize(_velocity) * 1f;
@@ -116,17 +123,17 @@ public class Boid : IBoid, IPoint
         return v;
     }
 
-    private Vector2 Separation(IEnumerable<Boid> boids)
+    protected Vector2 Separation(IEnumerable<Boid> boids)
     {
-        float desiredDist = _neighborhood / 2.0f;
+        float desiredDist = Neighborhood / 2.0f;
         Vector2 steer = Vector2.Zero;
 
         int count = 0;
 
         foreach (var other in boids)
         {
+            if (other.Species != Species) continue;
             float d = Vector2.Distance(Pos, other.Pos);
-
             if (other != this && d < desiredDist)
             {
                 Vector2 diff = Pos - other.Pos;
@@ -141,13 +148,13 @@ public class Boid : IBoid, IPoint
         }
         if (steer.LengthSquared() > 0)
         {
-            steer = Vector2.Normalize(steer) * _maxSpeed - _velocity;
-            steer = Limit(steer, _maxForce);
+            steer = Vector2.Normalize(steer) * MaxSpeed - _velocity;
+            steer = Limit(steer, MaxForce);
         }
         return steer;
     }
 
-    private Vector2 Alignment(IEnumerable<Boid> boids)
+    protected Vector2 Alignment(IEnumerable<Boid> boids)
     {
         Vector2 sum = Vector2.Zero;
         Vector2 steer = Vector2.Zero;
@@ -155,8 +162,9 @@ public class Boid : IBoid, IPoint
 
         foreach (var other in boids)
         {
+            if (other.Species != Species) continue;
             float d = Vector2.Distance(Pos, other.Pos);
-            if (other != this && d < _neighborhood)
+            if (other != this && d < Neighborhood)
             {
                 sum += other._velocity;
                 count++;
@@ -166,22 +174,23 @@ public class Boid : IBoid, IPoint
         if (count > 0)
         {
             sum /= count;
-            sum = Vector2.Normalize(sum) * _maxSpeed;
+            sum = Vector2.Normalize(sum) * MaxSpeed;
             steer = sum - _velocity;
-            steer = Limit(steer, _maxForce);
+            steer = Limit(steer, MaxForce);
         }
         return steer;
     }
 
-    private Vector2 Cohesion(IEnumerable<Boid> boids)
+    protected Vector2 Cohesion(IEnumerable<Boid> boids)
     {
         Vector2 sum = Vector2.Zero;
         int count = 0;
 
         foreach (var other in boids)
         {
+            if (other.Species != Species) continue;
             float d = Vector2.Distance(Pos, other.Pos);
-            if (other != this && d < _neighborhood + 30f)
+            if (other != this && d < Neighborhood + 30f)
             {
                 sum += other.Pos;
                 count++;
@@ -198,9 +207,9 @@ public class Boid : IBoid, IPoint
     protected Vector2 Seek(Vector2 target)
     {
         Vector2 desired = target - Pos;
-        desired = Vector2.Normalize(desired) * _maxSpeed;
+        desired = Vector2.Normalize(desired) * MaxSpeed;
         Vector2 steer = desired - _velocity;
-        return Limit(steer, _maxForce);
+        return Limit(steer, MaxForce);
     }
 
     protected Vector2 AvoidPoint(Vector2 target, float radius)
@@ -215,7 +224,7 @@ public class Boid : IBoid, IPoint
                 desired = Vector2.Normalize(desired);
 
             Vector2 steer = desired - _velocity;
-            return Limit(steer, _maxForce * 2.0f);
+            return Limit(steer, MaxForce * 2.0f);
         }
 
         return Vector2.Zero;
@@ -239,16 +248,15 @@ public class Boid : IBoid, IPoint
 
         if (d < radius)
         {
-            // Stronger force if very close, weaker when far away
             float strength = 1f - (d / radius);
             strength = strength * strength + 0.5f;
 
             diff.Normalize();
 
-            Vector2 desired = diff * _maxSpeed * strength;
+            Vector2 desired = diff * MaxSpeed * strength;
 
             Vector2 steer = desired - _velocity;
-            return Limit(steer, _maxForce * 5f); // gentle fleeing
+            return Limit(steer, MaxForce * 5f);
         }
 
         return Vector2.Zero;
@@ -265,5 +273,122 @@ public class Boid : IBoid, IPoint
         }
 
         return total;
+    }
+    protected Vector2 AvoidOtherSpecies(IEnumerable<Boid> boids, float radius)
+    {
+        Vector2 total = Vector2.Zero;
+        int count = 0;
+
+        foreach (var other in boids)
+        {
+            if (other == this) continue;
+            if (other.Species == this.Species) continue;
+
+            float d = Vector2.Distance(Pos, other.Pos);
+            if (d < radius)
+            {
+                Vector2 diff = Pos - other.Pos;
+                if (diff.LengthSquared() > 0)
+                    diff.Normalize();
+
+                float strength = 1f - (d / radius);
+                diff *= strength * MaxSpeed;
+
+                total += diff;
+                count++;
+            }
+        }
+
+        if (count > 0)
+            total /= count;
+
+        return Limit(total, MaxForce * 2.5f);
+    }
+}
+
+public class RedFish : Boid
+{
+    public RedFish(Vector2 pos, Texture2D img) : base(pos, img)
+    {
+        Species = Species.Red;
+    }
+}
+
+public class PurpleFish : Boid
+{
+    public PurpleFish(Vector2 pos, Texture2D img) : base(pos, img)
+    {
+        Species = Species.Purple;
+    }
+    protected override float Size => 0.04f;
+    protected override float MaxSpeed => 6.0f;
+    protected override float MaxForce => 0.09f;
+    protected override float Neighborhood => 70f;
+    protected override float AvoidRadius => 80f;
+
+    protected virtual float CohesionWeight => 0.9f;
+    protected virtual float AlignmentWeight => 0.9f;
+    protected virtual float SeparationWeight => 1.4f;
+    protected virtual float AvoidStrength => 1.5f;
+    protected virtual float panic => 2.0f;
+
+    protected virtual float WanderStrength => 0.07f;
+
+    public override void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers)
+    {
+        Vector2 sep = Separation(boids) * SeparationWeight;
+        Vector2 align = Alignment(boids) * AlignmentWeight;
+        Vector2 coh = Cohesion(boids) * CohesionWeight;
+
+        Vector2 avoid = AvoidPoints(avoids, AvoidRadius) * AvoidStrength;
+        Vector2 flee = FleeMany(chasers, FleeRadius) * panic;
+        Vector2 avoidOther = AvoidOtherSpecies(boids, AvoidRadius) * AvoidStrength;
+
+        Vector2 wander = RandomDirection() * WanderStrength;
+
+        _acceleration = sep + align + coh + avoid + flee + avoidOther;
+
+        _velocity += _acceleration;
+        Move();
+        rotation = GetBoidRotation();
+    }
+}
+
+public class YellowFish : Boid
+{
+    public YellowFish(Vector2 pos, Texture2D img) : base(pos, img)
+    {
+        Species = Species.Yellow;
+    }
+    protected override float Size => 0.08f;
+
+    protected override float MaxSpeed => 2.0f;
+    protected override float MaxForce => 0.03f;
+    protected override float Neighborhood => 150f;
+
+    protected virtual float CohesionWeight => 1.1f;
+    protected virtual float AlignmentWeight => 0.8f;
+    protected virtual float SeparationWeight => 1.6f;
+    protected virtual float AvoidStrength => 0.8f;
+
+    protected virtual float AvoidOtherSpeciesRadius => 30f;
+
+    public override void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers)
+    {
+        Vector2 sep = Separation(boids) * SeparationWeight;
+        Vector2 align = Alignment(boids) * AlignmentWeight;
+        Vector2 coh = Cohesion(boids) * CohesionWeight;
+
+        Vector2 avoid = AvoidPoints(avoids, AvoidRadius) * AvoidStrength;
+        Vector2 flee = FleeMany(chasers, FleeRadius);
+
+
+        Vector2 interSpecies = AvoidOtherSpecies(boids, AvoidOtherSpeciesRadius) * AvoidStrength;
+
+        _acceleration = sep + align + coh + avoid + interSpecies + flee;
+
+        _velocity += _acceleration;
+        Move();
+        rotation = GetBoidRotation();
     }
 }
