@@ -25,6 +25,7 @@ public abstract class Boid : IBoid, IPoint
     protected virtual float Size => 0.06f;
     protected virtual float AvoidRadius => 40f;
     protected virtual float FleeRadius => 150f;
+    protected virtual float WanderStrength => 0.05f;
 
     protected Vector2 _velocity;
     protected Vector2 _acceleration;
@@ -86,8 +87,9 @@ public abstract class Boid : IBoid, IPoint
         Vector2 avoid = AvoidPoints(avoids, AvoidRadius);
         Vector2 fear = FleeMany(chasers, FleeRadius);
         Vector2 avoidOther = AvoidOtherSpecies(boids, AvoidRadius + 20f);
+        Vector2 wander = RandomDirection() * WanderStrength;
 
-        _acceleration = sep + align + coh + avoid + fear + avoidOther;
+        _acceleration = sep + align + coh + avoid + fear + avoidOther + wander;
         _velocity += _acceleration;
         if (_velocity.Length() < 1f)
             _velocity = Vector2.Normalize(_velocity) * 1f;
@@ -332,7 +334,7 @@ public class PurpleFish : Boid
     protected virtual float AvoidStrength => 1.5f;
     protected virtual float panic => 2.0f;
 
-    protected virtual float WanderStrength => 0.07f;
+    protected override float WanderStrength => 0.01f;
 
     public override void Update(List<Boid> boids, List<Avoid> avoids, List<Chaser> chasers)
     {
@@ -346,7 +348,7 @@ public class PurpleFish : Boid
 
         Vector2 wander = RandomDirection() * WanderStrength;
 
-        _acceleration = sep + align + coh + avoid + flee + avoidOther;
+        _acceleration = sep + align + coh + avoid + flee + avoidOther + wander;
 
         _velocity += _acceleration;
         Move();
@@ -364,12 +366,14 @@ public class YellowFish : Boid
 
     protected override float MaxSpeed => 2.0f;
     protected override float MaxForce => 0.03f;
-    protected override float Neighborhood => 150f;
+    protected override float Neighborhood => 200f;
 
-    protected virtual float CohesionWeight => 1.1f;
+    protected virtual float CohesionWeight => 1.2f;
     protected virtual float AlignmentWeight => 0.8f;
-    protected virtual float SeparationWeight => 1.6f;
-    protected virtual float AvoidStrength => 0.8f;
+    protected virtual float SeparationWeight => 1.8f;
+    protected virtual float AvoidStrength => 0.9f;
+
+    protected override float WanderStrength => 0.01f;
 
     protected virtual float AvoidOtherSpeciesRadius => 30f;
 
@@ -382,10 +386,10 @@ public class YellowFish : Boid
         Vector2 avoid = AvoidPoints(avoids, AvoidRadius) * AvoidStrength;
         Vector2 flee = FleeMany(chasers, FleeRadius);
 
-
         Vector2 interSpecies = AvoidOtherSpecies(boids, AvoidOtherSpeciesRadius) * AvoidStrength;
+        Vector2 wander = RandomDirection() * WanderStrength;
 
-        _acceleration = sep + align + coh + avoid + interSpecies + flee;
+        _acceleration = sep + align + coh + avoid + interSpecies + flee + wander;
 
         _velocity += _acceleration;
         Move();
