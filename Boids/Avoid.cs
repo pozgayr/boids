@@ -16,7 +16,6 @@ public class Avoid : IPoint
     float halfH;
     float halfW;
     Vector2 origin;
-    float _pushRadius = 40f;
     float _pushForce = 0.5f;
 
 

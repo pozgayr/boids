@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>/home/pozgayr/Projects/boids/Boids/Content/rybka1.png</SourceFile>
-  <SourceTime>2025-11-30T00:56:41.1026971+01:00</SourceTime>
+  <SourceTime>2025-12-01T01:06:08.4489341+01:00</SourceTime>
   <DestFile>/home/pozgayr/Projects/boids/Boids/Content/bin/DesktopGL/Content/rybka1.xnb</DestFile>
-  <DestTime>2025-11-30T00:57:17.5103736+01:00</DestTime>
+  <DestTime>2025-12-01T01:07:01.7521772+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T16:25:32+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
